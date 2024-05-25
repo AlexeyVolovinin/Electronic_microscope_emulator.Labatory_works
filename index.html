@@ -1,0 +1,1274 @@
+<!-- 
+Created  by Andres Vasquez for Microscopy Australia - https://micro.org.au
+  —— https://www.andresvasquez.net ——
+copyright:This work is licensed under a Creative Commons Attribution 4.0 International License.
+-->
+<!--< >-->
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- GA4 tag -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NVP7GW16R3"></script>
+    <!-- Google tag (gtag.js) -->
+    <script>
+        // Define dataLayer and the gtag function.
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        
+        // Default ad_storage to 'denied' as a placeholder
+        // Determine actual values based on your own requirements
+        gtag('consent', 'default', {
+          'ad_storage': 'denied',
+          'analytics_storage': 'denied'
+        });
+        gtag('js', new Date());  
+        gtag('config', 'G-NVP7GW16R3', { 'debug_mode':true });
+    </script>
+    <script>
+        function consentGranted() {
+          gtag('consent', 'update', {
+
+            'ad_storage': 'granted',
+            'analytics_storage': 'granted'
+          });
+          window['ga-disable-UA-21028248-3'] = false;
+          console.log("GRANTED")
+        }
+    </script>
+    <!-- End GA4 -->
+    
+    <!-- UA Analytics -->
+                <script>
+                    window.ga = window.ga || function() {
+                        (ga.q = ga.q || []).push(arguments)
+                    };
+                    ga.l = +new Date;
+                    ga('create', 'UA-21028248-3', 'auto');
+                    ga('require', 'urlChangeTracker');
+                    window.onpopstate = function(event) {
+                        var myHash = window.location.hash;
+                        var newHash = myHash.substr(2);
+                        var sendHash = newHash.substring(0, newHash.indexOf('level'));
+                        ga_title = document.getElementById("content-title").innerHTML;
+                        ga('set', 'title', ga_title);
+                        ga('set', 'page', window.location.pathname + window.location.search + sendHash);
+                        ga('send', 'pageview');
+                        window['ga-disable-UA-21028248-3'] = true;
+                    };
+                </script>
+                <script async src='https://www.google-analytics.com/analytics.js'></script>
+                <script async src='js/autotrack.js'></script>
+    <!-- End UA Analytics -->
+
+    <!-- End Google Analytics -->
+  
+    <meta charset="UTF-8">
+    <meta name="google" content="notranslate">
+    <meta http-equiv="Content-Language" content="en">
+    <title>Scanning Electron Microscopy</title>
+    <meta property="og:description" content="The scanning electron microscope simulator helps you learn how to operate an SEM through an unbranded universal interface. Learn how to choose the best settings for your sample and make adjustments to optimise your images.">
+    <meta property="og:title" content="Scanning Electron Microscope simulator">
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/SEM_simulator.css">
+    <link rel="stylesheet" href="css/custom-dd-jquery-ui.css">
+    <link rel="stylesheet" href="css/jquery-ui-slider-pips.min.css">
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <div id="simulator-base">
+        <div id="controls-left">
+            <div id="logos-links">
+                <a id="myscope-logo" title="MyScope, Train for advanced research."></a>
+            </div>
+
+            <div id="top-controls-left">
+                <div id="chamber-btns" class="flex-between">
+                    <button id="btn-vent" value="off" class="btn btn-disabled" disabled>VENT</button>
+                    <button id="btn-chamber" value="off" class="btn btn-disabled" disabled>OPEN</button>
+                    <button id="btn-evacuate" value="off" class="btn btn-disabled" disabled>EVACUATE</button>
+                </div>
+                <div id="snd-controls" class="flex-evenly">
+                    <div id="ht-se-btns" class="flex">
+                        <p>HT</p>
+                        <button value="off" id="btn-ht" class="ht-btn btn-disabled" disabled> </button>
+                    </div>
+                    <div id="se" class="switch-div flex-around">
+                        <p>SE</p>
+                        <label class="switch">
+                            <input type="checkbox" id="btn-se" disabled> <span class="se-bse-chckbx round btn-disabled"></span> </label>
+                        <p>BSE</p>
+                        <div id="se-bse-info" class="info-icon"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="sliders-div">
+                <div class="flex slider-label-div">
+                    <p class="slider-label">ACCELERATING VOLTAGE</p>
+                    <div id="accvolt-info" class="info-icon"></div>
+                </div>
+                <div id="acc-volt" class="slider"></div>
+
+
+                <div class="flex slider-label-div">
+                    <p class="slider-label">SPOT SIZE</p>
+                    <div id="spotz-info" class="info-icon"></div>
+                </div>
+                <div id="spot-size" class="slider"></div>
+
+                <div class="flex slider-label-div">
+                    <p class="slider-label">WORKING DISTANCE</p>
+                    <div id="zpos-info" class="info-icon"></div>
+                </div>
+                <div id="z-pos" class="slider"></div>
+
+                <div class="flex slider-label-div">
+                    <p class="slider-label">BRIGHTNESS</p>
+                    <div id="bright-contrast-info" class="info-icon"></div>
+                </div>
+                <div id="brightness" class="slider"></div>
+
+                <div class="flex slider-label-div">
+                    <p class="slider-label">CONTRAST</p>
+                    <div id="bright-contrast-info" class="info-icon"></div>
+                </div>
+                <div id="contrast" class="slider"></div>
+
+                <div class="flex slider-label-div">
+                    <p class="slider-label">MAGNIFICATION</p>
+                </div>
+                <div id="magnification" class="slider"></div>
+
+                <div class="flex slider-label-div">
+                    <p class="slider-label">COARSE FOCUS</p>
+                    <div id="focus-info" class="info-icon"></div>
+                </div>
+                <div id="focus-coarse" class="slider"></div>
+
+                <div class="flex slider-label-div">
+                    <p class="slider-label">FINE FOCUS</p>
+                    <div id="focus-info" class="info-icon"></div>
+                </div>
+                <div id="focus-fine" class="slider"></div>
+
+                <div class="flex slider-label-div">
+                    <p class="slider-label">X STIGMATOR &#160;</p><h4> &#8596;</h4>
+                    <div id="astigmatism-info" class="info-icon"></div>
+                </div>
+                <div id="astigmatism-x" class="slider"></div>
+
+                <div class="flex slider-label-div">
+                    <p class="slider-label label-disablled">Y STIGMATOR &#160;</p><h3> &#8597;</h3>
+                    <div id="astigmatism-info" class="info-icon"></div>
+                </div>
+                <div id="astigmatism-y" class="slider"></div>
+
+            </div>
+        </div>
+        <div id="right-panel">
+            <div id="top-instructions">
+                <p id="top-instructions-txt">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+            </div>
+            <div class="controls-right flex-around">
+                <fieldset id="samples-fieldset">
+                    <label id="samples-label">SAMPLE</label>
+                    <select id="samples" autocomplete="off">
+                        <option value="0" selected="selected" disabled></option>
+                        <option value="sample1">WOOD</option>
+                        <option value="sample2">POLLEN</option>
+                        <option value="sample3">ROCK</option>
+                        <option value="sample4">STEEL</option>
+                    </select>
+                </fieldset>
+                <div id="btns-scan" class="right-btns flex-between">
+                    <div id="scan-label" class="flex slider-label-div">
+                        <p class="slider-label">SCAN SPEED</p>
+                        <div id="scan-info" class="info-icon"></div>
+                    </div>
+                    <button type="button" id="btn-tvrate" value="on" class="scan-rate btn btn-disabled" disabled>TV RATE</button>
+                    <button type="button" id="btn-scan1" value="off" class="scan-rate btn btn-disabled" disabled>SLOW SCAN 1</button>
+                    <button type="button" id="btn-scan2" value="off" class="scan-rate btn btn-disabled" disabled>SLOW SCAN 2</button>
+                </div>
+                <div id="btns-img" class="right-btns flex-between">
+                    <button type="button" id="btn-save" value="on" class="btn btn-disabled" disabled>SAVE IMAGE</button>
+                    <button type="button" id="btn-optimal" value="on" class="btn btn-disabled" disabled>OPTIMAL
+                        IMAGE</button>
+                </div>
+            </div>
+
+            <div class="broken flex-around totally-hidden">
+                <div><img src="images/simulator/warning.svg" id="warning" alt="Warning sign">
+                    <br>
+                    <p>YOU HAVE DESTROYED THE SAMPLE STAGE</p>
+                    <br>
+                    <button type="button" id="btn-reload" class="btn">START AGAIN</button>
+                </div>
+            </div>
+            <div id="micrograph-wrapper"><canvas id="micrograph-canvas"></canvas></div>
+            <div class="instructionsPanel flex-around totally-hidden">
+                <button type="button" id="ok-keepWorking" class="btn">OK, GOT IT!</button>
+            </div>
+            <div id="scalebar-div" class="flex-around totally-hidden">
+                <div id="scalebar"></div>
+                <p id="scale-unit"></p>
+            </div>
+        </div>
+    </div>
+    <!-- THE EXAMPLE MODAL -->
+    <div id="optimal-div" class="modal totally-hidden">
+        <div class="modal-top flex-between">
+            <h2>OPTIMAL MICROGRAPH</h2> 
+            <button type="button" id="btn-settings" class="btn">REVEAL SETTINGS</button>
+            <p id="example-settings" class="totally-hiddden">AV = 10kV, SS = 1nm, WD = 10mm</p>
+            <span id="close-example" class="close-modal">&times;</span>
+        </div> 
+        <img id="example-img" alt="Example of a good micrograph">
+    </div>
+
+    <div id="info-modal" class="modal totally-hidden">
+        <div id="info-modal-top" class="modal-top">
+            <h2></h2> <span id="close-info" class="close-modal">&times;</span>
+        </div>
+        <p id="info-txt">Please wait while the image scans</p>
+    </div>
+    
+    <div id="modal-resize" class="flex any-modal">
+        <div id="resize-window" class="modal-window">
+            <div class="modal-title flex-between">
+                <p>For an optimal experience:
+                </p><span id="close-resize" class="close-modal">×</span>
+            </div>
+            <div id="resize-content" class="modal-content">
+                <p>If the simulator extends beyond the lower edge of your screen, drag the side edge of your browser
+                    until the simulator fits properly within the window.</p>
+                <img src="images/simulator/resize.svg" id="resize-animation" alt="myScope's logo">
+                <br>
+            </div>
+            <div class="invisible-margin"></div>
+        </div>
+    </div>
+
+    <!-- THE COOKIES MODAL -->
+    <div id="cookies-modal" class="totally-hidden">
+        <div class="modal-content">
+            <div id="info-area">
+                <p>Help us keep MyScope available to you all. We need to count how many people come and use the site so we can demonstrate its value to the global microscopy community. Please accept Cookies so we can capture MyScope user numbers.</p>
+            </div>
+            <div id="cookies-div" class="flex-evenly">
+                <form id="accept-cookies-form" class="cookies-form">
+                    <button id="accept-cookies-btn" class="square-btn">ENABLE</button>
+                </form>
+                <form id="deny-cookies-form" class="cookies-form">
+                    <button id="deny-cookies-btn" class="square-btn">DISABLE</button>
+                </form>
+            </div>
+            <div class="invisible-margin"></div>
+        </div>
+    </div>
+    <!--    -->
+    <!-- THE STITEMAP MODAL -->
+    <div id="modal-sitemap" class="flex any-modal totally-hidden">
+        <div id="sitemap-window" class="modal-window">
+            <div class="modal-title flex-between">
+                <h2></h2>
+                <span id="close-sitemap" class="close-modal">×</span>
+            </div>
+            <div id="sitemap-content" class="modal-content sitemap-div">
+                    <div class="build-blk-content flex-evenly">
+                        <div id="sitemap-left-column">
+                            <div id="sitemap-welcome" class="sitemap-others sitemap-div-single">
+                                <label><a class="sitemap-link"
+                                        href="/">Welcome to MyScope</a></label>
+                            </div>
+                            <div id="sitemap-topics" class="sitemap-div-wrapper build-blk-content">
+                                <label>Online Modules</label>
+                                <div class='sitemap-section'>
+                                    <button class='sitemap-section-title'>Microscopy Concepts</button>
+                                    <div class='sitemap-section-list'>
+                                        <ul>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/M101_What_is_Microscopy'>What is Microscopy?</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Why do microscopy?</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/M101_Magnification'>Magnification</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/M101_Magnification_and_measurement'>Magnification and measurement </a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/M101_Resolution'>Resolution</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/M101_Depth_of_field'>Depth of field</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Electromagnetic Spectrum</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/M101_Introduction_to_the_Electromagnetic_Spectrum'>Introduction to the Electromagnetic Spectrum</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/M101_Wavelength__frequency_and_energy'>Wavelength, frequency and energy</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/M101_Electromagnetic_spectrum_and_microscopy'>Electromagnetic spectrum and microscopy</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/M101_Interactions_with_Matter'>Interactions with Matter</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Lenses and Aberrations</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/M101_Lenses'>Lenses</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Aberrations</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/M101_Types_of_aberration'>Types of aberration</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/M101_Overcoming_aberrations'>Overcoming aberrations</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/M101_Calibrations'>Calibrations</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/M101_Nyquist_Sampling'>Nyquist Sampling</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/M101_Detectors_and_Cameras'>Detectors and Cameras</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Digital Images</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/M101_Introducing_digital_images'>Introducing digital images</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/M101_Images_for_Print_in_Journals_and_Posters'>Images for Print in Journals and Posters</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/M101_Images_for_Presentation'>Images for Presentation</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/M101_Colour_enhancement'>Colour enhancement</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/M101_Image_Ethics'>Image Ethics</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/M101_Credits'>Credits</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class='sitemap-section'>
+                                    <button class='sitemap-section-title'>Scanning Electron Microscopy</button>
+                                    <div class='sitemap-section-list'>
+                                        <ul>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>What is SEM?</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Background information</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SEM_SEM_Basics'>SEM Basics</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SEM_Applications_and_uses_of_SEM'>Applications and uses of SEM</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SEM_What_can_it_do_differently_to_a_light_microscope'>What can it do differently to a light microscope?</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SEM_What_can_t_it_do'>What can’t it do?</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>How does an SEM work?</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SEM_Structure_of_an_SEM'>Structure of an SEM</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>The electron gun</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SEM_How_the_gun_works'>How the gun works</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SEM_Electron_sources'>Electron sources</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SEM_Filament_saturation'>Filament saturation</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>The vacuum system</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SEM_Vacuum_system_overview'>Vacuum system overview</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SEM_Types_of_pumps'>Types of pumps</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SEM_Vacuum_requirements'>Vacuum requirements</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SEM_Water_chilling_system'>Water chilling system</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SEM_Structure_of_the_column'>Structure of the column</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SEM_The_specimen_chamber'>The specimen chamber</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SEM_Beam_specimen_interactions'>Beam/specimen interactions</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SEM_The_image'>The image</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>How do I get a good image?</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SEM_A_basic_guide_to_using_an_SEM'>A basic guide to using an SEM</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SEM_Specimen_preparation'>Specimen preparation</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SEM_Accelerating_voltage'>Accelerating voltage</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SEM_Apertures'>Apertures</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SEM_Spot_size'>Spot size</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SEM_Working_distance'>Working distance</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SEM_Contrast_and_brightness'>Contrast and brightness</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SEM_Magnification_and_calibration'>Magnification and calibration</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SEM_Scan_rate_and_signal_to_noise'>Scan rate and signal to noise</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SEM_Image_artefacts_and_trouble_shooting'>Image artefacts and trouble-shooting</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Specialised SEM techniques</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SEM_CL'>CL</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SEM_ESEM'>ESEM</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SEM_Cryo_SEM___Cold_stage'>Cryo-SEM - Cold stage</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SEM_FIB'>FIB</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SEM_EDS'>EDS</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SEM_EBSD'>EBSD</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SEM_EBL'>EBL</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SEM_Backscatter'>Backscatter</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SEM_Credits'>Credits</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class='sitemap-section'>
+                                    <button class='sitemap-section-title'>Transmission Electron Microscopy</button>
+                                    <div class='sitemap-section-list'>
+                                        <ul>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>What is TEM?</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Introduction_to_TEM'>Introduction to TEM</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Key_advantages'>Key advantages</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_What_the_TEM_can_do'>What the TEM can do</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_What_the_TEM_can_t_do'>What the TEM can't do</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>How does a TEM work?</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Overview of TEM workings</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Instrument_design'>Instrument design</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Resolution'>Resolution</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Components of a TEM</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Introducing_TEM_components'>Introducing TEM components</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Vacuum_system'>Vacuum system</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Electron_gun'>Electron gun</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Electron_column'>Electron column</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Electromagnetic_lenses'>Electromagnetic lenses</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Specimen_sample_chamber'>Specimen/sample chamber</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Image_capture'>Image capture</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Detectors'>Detectors</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>How images are formed</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Image_formation_basics'>Image formation basics</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Image types</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Bright_field_images'>Bright-field images</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Dark_field_images'>Dark-field images</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Diffraction'>Diffraction</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>How do I get a good image?</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Instrument alignment</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Getting_started_with_instrument_alignment'>Getting started with instrument alignment</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Condenser_lens_centre'>Condenser lens centre</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Condenser_lens_stigmation'>Condenser lens stigmation</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_The_eucentric_position'>The eucentric position</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Focus'>Focus</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Use_of_objective_appertures'>Use of objective appertures</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Final_adjustment'>Final adjustment</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Problems with lenses and alignments</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Types_of_problems'>Types of problems</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Spherical_aberration'>Spherical aberration</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Chromatic_aberration'>Chromatic aberration</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Astigmatism'>Astigmatism</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Understanding_instrument_settings'>Understanding instrument settings</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Specimen preparation</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Introduction_to_specimen_preparation'>Introduction to specimen preparation</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Specimen_holders'>Specimen holders</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Organic (soft) samples</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Getting_started_with_organic_samples'>Getting started with organic samples</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Ultramicrotomy'>Ultramicrotomy</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Immunolabelling'>Immunolabelling</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Staining'>Staining</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Cryo_fixation'>Cryo-fixation</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Chemical_fixation'>Chemical fixation</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Dehydration'>Dehydration</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Infiltration'>Infiltration</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Polymerisation'>Polymerisation</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Grid_mounting'>Grid mounting</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Negative_staining'>Negative staining</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Cryo_substitution'>Cryo-substitution</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Low_temperature_polymerisation'>Low temperature polymerisation</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Freezing_methods'>Freezing methods</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Cryo_ultramicrotomy'>Cryo-ultramicrotomy</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Cryo_transfer'>Cryo-transfer</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Freeze_etch'>Freeze-etch</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Replica'>Replica</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Inorganic (hard) samples</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Sample_prep_flow_chart'>Sample prep flow chart</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Powders'>Powders</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Preparing_from_the_bulk'>Preparing from the bulk</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Dimpling'>Dimpling</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Mechanical_polishing'>Mechanical polishing</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Electro_polishing'>Electro-polishing</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Ion_beam_thinning'>Ion beam thinning</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Focussed_ion_beam_milling'>Focussed ion beam milling</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Artifacts'>Artifacts</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Specialised TEM techniques</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Cryo - TEM</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Introduction_to_Cryo'>Introduction to Cryo</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Why_Cryo_TEM'>Why Cryo TEM?</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_The_freezing_process'>The freezing process</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Diffraction</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Introduction_to_diffraction'>Introduction to diffraction</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Image_appearance'>Image appearance</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_The_diffracted_beam'>The diffracted beam</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Tilting'>Tilting</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Camera_length'>Camera length</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Kikuchi_patterns'>Kikuchi patterns</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Selected_area_diffraction__SAD'>Selected area diffraction (SAD)</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Ring_patterns'>Ring patterns</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Convergent_beam_electron_diffraction__CBED'>Convergent beam electron diffraction (CBED)</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Dark_field_imaging'>Dark-field imaging</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>High resolution imaging</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_What_is_high_resolution_imaging'>What is high resolution imaging?</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Scanning TEM (STEM)</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Bright_field_STEM'>Bright field STEM</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Beam__8211_sample_interactions'>Beam&#8211;sample interactions</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Use_of_ronchigrams_in_STEM'>Use of ronchigrams in STEM</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_STEM_detectors'>STEM detectors</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_High_angle_annular_dark_field__HAADF'>High-angle-annular dark-field (HAADF)</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Energy dispersive spectroscopy (EDS)</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Introduction_to_EDS'>Introduction to EDS</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Quantification_of_EDS_data'>Quantification of EDS data</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Electron_energy_loss_spectroscopy__EELS'>Electron energy loss spectroscopy (EELS)</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/TEM_Credits'>Credits</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class='sitemap-section'>
+                                    <button class='sitemap-section-title'>Light & Fluorescence Microscopy</button>
+                                    <div class='sitemap-section-list'>
+                                        <ul>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Introduction</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_Basics'>Basics</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_What_makes_an_objective_good'>What makes an objective good?</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_Aberrations'>Aberrations</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Light microscopy</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_The_complete_microscope'>The complete microscope</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_Koehler_illumination'>Koehler illumination</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_The_light_path_and_microscope'>The light path and microscope</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_Performing_Koehler_illumination'>Performing Koehler illumination</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Transmitted Light Imaging</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_What_is_Brightfield_imaging'>What is Brightfield imaging?</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_Microscope_components_for_transmitted_light_imaging'>Microscope components for transmitted light imaging</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_Light_Path_for_BF_microscopy'>Light Path for BF microscopy</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Types of transmitted light imaging</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_The_five_techniques'>The five techniques</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_Bright_field'>Bright field</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_Dark_field_microscopy'>Dark field microscopy</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_Phase_contrast'>Phase contrast</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_Differential_interference_contrast_imaging__DIC_or_Nomarski_imaging'>Differential interference contrast imaging (DIC or Nomarski imaging)</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_Polarised_light_microscopy'>Polarised light microscopy</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_Reflected_light_imaging'>Reflected light imaging</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Fluorescence microscopy</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_What_is_Fluorescence_imaging'>What is Fluorescence imaging?</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_The_light_path_and_microscope_parts'>The light path and microscope parts</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Confocal microscopy</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_What_is_Confocal_imaging'>What is Confocal imaging?</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_A_practical_confocal_microscope'>A practical confocal microscope</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Components of the confocal microscope</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_Laser'>Laser</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_Filters'>Filters</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_Photomultiplier_tubes__PMTs'>Photomultiplier tubes (PMTs)</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Practical image acquisition</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_Adjustments'>Adjustments</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_The_eternal_triangle'>The eternal triangle</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_What_is_important'>What is important?</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_The_Confocal_Pinhole'>The Confocal Pinhole</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Scanning and resolution</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_How_scanning_works'>How scanning works</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_Scan_areas_and_relationship_to_pixels_and_resolution'>Scan areas and relationship to pixels and resolution</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_Zoom'>Zoom</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Detection parameters</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_Laser_power'>Laser power</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_Adjusting_the_Image_and_Detector_Controls'>Adjusting the Image and Detector Controls</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_Averaging'>Averaging</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Sequential and simultaneous imaging</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_Using_multiple_dyes'>Using multiple dyes</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_Fluorescence_Spectra'>Fluorescence Spectra</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_Fluorescence_Spectral_Overlap'>Fluorescence Spectral Overlap</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_Simultaneous_Imaging'>Simultaneous Imaging</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_Sequential_Imaging'>Sequential Imaging</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Collecting Z stacks</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_What_is_a_Z_stack'>What is a Z-stack?</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_Optical_Section_Thickness'>Optical Section Thickness</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_Nyquist_Sampling_for_Z_stacks'>Nyquist Sampling for Z stacks</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_Under_and_Over_Sampling_in_Z_Stacks'>Under and Over Sampling in Z Stacks</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_Projections'>Projections</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_Image_rotations'>Image rotations</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_Axial_resolution_and_Optical_section_thickness'>Axial resolution and Optical section thickness</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Super-Resolution Microscopy</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_The_power_of_Super_Resolution'>The power of Super-Resolution</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_Criteria_for_optical_resolution'>Criteria for optical resolution</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_Advantages_of_higher_resolved_images'>Advantages of higher resolved images</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>STED/RESOLFT techniques</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_Overview_to_STED_RESOLFT'>Overview to STED/RESOLFT</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>STED</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_Introduction_to_STED'>Introduction to STED</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_The_Photo_physical_Principle'>The Photo-physical Principle</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_Resolution_in_STED_microscopy'>Resolution in STED microscopy</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_RESOLFT'>RESOLFT</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Single molecule localisation techniques</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_One_point_at_a_time'>One point at a time</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_PALM'>PALM</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_dSTORM___GSDIM'>dSTORM / GSDIM</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_STORM'>STORM</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_PAINT_and_DNA_PAINT'>PAINT and DNA PAINT</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_3D_SMLM'>3D-SMLM</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Sample preparation for Super-Resolution Microscopy</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>General Considerations</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_Sample_preparation'>Sample preparation</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_Sample_fixation'>Sample fixation</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_Properties_of_labels'>Properties of labels</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_Live_cell_Imaging'>Live-cell Imaging</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_Labeling_via_affinity_probes'>Labeling via affinity probes</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Sample preparation for STED microscopy</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_Fluorophores_and_strategies_for_fixed_samples'>Fluorophores and strategies for fixed samples</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_Live_cell_STED_Imaging'>Live-cell STED Imaging</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Sample preparation for PALM</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_Fluorophores_and_their_properties'>Fluorophores and their properties</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Sample preparation for dSTORM</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_Fluorophores_and_strategies_for_fixed_samples'>Fluorophores and strategies for fixed samples</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Super-Resolution Image Acquisition</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>STED</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_The_optical_path_of_a_STED_microscope'>The optical path of a STED microscope</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_STED_Imaging'>STED Imaging</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>SMLM</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_The_optical_path_of_a_SMLM_microscope'>The optical path of a SMLM microscope</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Imaging strategies for dSTORM</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_Blinking_fluorophores'>Blinking fluorophores</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_Laser_power'>Laser power</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_Buffer'>Buffer</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_UV_Light'>UV Light</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_Exposure_time'>Exposure time</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_Image_reconstruction_from_SMLM_data'>Image reconstruction from SMLM data</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/LFM_Credits'>Credits</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class='sitemap-section'>
+                                    <button class='sitemap-section-title'>Cryo-Electron Microscopy</button>
+                                    <div class='sitemap-section-list'>
+                                        <ul>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>What is Cryo-EM?</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_Introduction_to_cryo_techniques'>Introduction to cryo techniques</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_Why_cryo'>Why cryo?</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_Which_cryo_technique_to_use'>Which cryo technique to use</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_Challenges_of_cryo'>Challenges of cryo</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Principles of freezing</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_Properties_of_water'>Properties of water</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_Freezing_of_water'>Freezing of water</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Types of freezing</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_Plunge_freezing'>Plunge freezing</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_High_pressure_freezing'>High pressure freezing</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_Other_freezing_techniques'>Other freezing techniques</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Cryo-TEM</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_Introducing_cryo_TEM'>Introducing cryo-TEM</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>The cryo TEM</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_The_microscope'>The microscope</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_Electron_energy_filters'>Electron energy filters</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_Phase_plates'>Phase plates</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_Electron_detectors'>Electron detectors</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Imaging in a cryo-TEM</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_How_images_are_formed'>How images are formed</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Fourier Transformation</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_Why_do_Fourier_transforms'>Why do Fourier transforms</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_What_is_a_Fourier_Transform'>What is a Fourier Transform?</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_Fourier_transforms_in_cryo_TEM_image_processing'>Fourier transforms in cryo-TEM image processing</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_The_power_spectrum'>The power spectrum</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_Why_do_we_even_need_to_look_at_the_power_spectrum'>Why do we even need to look at the power spectrum?</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_Contrast_transfer_function'>Contrast transfer function</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Single particle analysis</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_Introducing_Single_Particle_Analysis'>Introducing Single Particle Analysis</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_Biochemical_preparation_and_stabilisation'>Biochemical preparation and stabilisation</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_Specimen_screening_by_negative_staining'>Specimen screening by negative staining</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_Vitrification'>Vitrification</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_Optimisation_of_orientation_and_distribution'>Optimisation of orientation and distribution</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_Specimen_screening_by_cryo'>Specimen screening by cryo</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_Data_acquisition'>Data acquisition</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_Motion_correction'>Motion correction</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_Dose_weighting'>Dose weighting</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_Averaging'>Averaging</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_Particle_picking'>Particle picking</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_2D_classification'>2D classification</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_3D_reconstruction'>3D reconstruction</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_Validation'>Validation</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_Sub_tomogram_averaging'>Sub-tomogram averaging</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Cryo-tomography (cryo-ET)</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_Introducing_cryo_electron_tomography'>Introducing cryo-electron tomography</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_The_TEM_for_cryo_ET'>The TEM for cryo-ET</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_Phase_plates'>Phase plates</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_Sample_preparation'>Sample preparation</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_Data_acquisition'>Data acquisition</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_Tomogram_reconstruction'>Tomogram reconstruction</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_Tomogram_interpretation'>Tomogram interpretation</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Sub-tomogram averaging</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_Introducing_sub_tomogram_averaging'>Introducing sub-tomogram averaging</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_Particle_picking'>Particle picking</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_Sub_tomogram_averaging_and_alignment'>Sub-tomogram averaging and alignment</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_Sub_tomogram_classification'>Sub-tomogram classification</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_Model_refinement_and_validation'>Model refinement and validation</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Electron crystallography</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_Diffraction_based_Cryo_EM_Techniques'>Diffraction-based Cryo-EM Techniques</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_2D_crystallography'>2D crystallography </a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_Introducing_Micro_ED'>Introducing Micro-ED</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_The_sample_for_Micro_ED'>The sample for Micro-ED</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_Sample_preparation_for_Micro_ED'>Sample preparation for Micro-ED</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_The_TEM_for_Micro_ED'>The TEM for Micro-ED</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_Sample_screening_for_Micro_ED'>Sample screening for Micro-ED</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_Data_collection___Micro_ED'>Data collection – Micro-ED</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_Data_analysis___Micro_ED'>Data analysis – Micro-ED</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Cryo-SEM</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_Introducing_cryo_SEM'>Introducing cryo-SEM</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_Cryo_SEM_design'>Cryo-SEM design</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_Sample_preparation___Freezing__amp__cryo_transfer'>Sample preparation – Freezing &amp; cryo-transfer</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_Sample_preparation____Fracturing_and_cryo_planing'>Sample preparation – Fracturing and cryo-planing</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_Sample_preparation____Sublimation'>Sample preparation – Sublimation</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_Sample_preparation___Coating'>Sample preparation – Coating</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_Cryo_SEM_operation'>Cryo-SEM operation</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_Cryo_SEM_microanalysis'>Cryo-SEM microanalysis</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_Cryo_SEM_artefacts'>Cryo-SEM artefacts</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Cryo-FIB</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_Introducing_cryo_FIB'>Introducing cryo-FIB</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_TEM_lamella_production_by_cryo_FIB'>TEM lamella production by cryo-FIB</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_Cryo_FIB_SEM_Volume_Imaging'>Cryo-FIB-SEM Volume Imaging</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_Cryo_ultramicrotomy'>Cryo-ultramicrotomy</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/CRYO_Credits'>Credits</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class='sitemap-section'>
+                                    <button class='sitemap-section-title'>X-ray Diffraction</button>
+                                    <div class='sitemap-section-list'>
+                                        <ul>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Introduction to XRD</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/XRD_XRD_basics'>XRD basics</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/XRD_Interesting_facts'>Interesting facts</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/XRD_Nobel_prizes_for_research_with_X_rays'>Nobel prizes for research with X-rays</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Background information</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/XRD_X_rays_Overview'>X-rays Overview</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/XRD_Properties_of_X_rays'>Properties of X-rays</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/XRD_Production_of_X_rays'>Production of X-rays</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>The geometry of crystals</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/XRD_Crystal_structure'>Crystal structure</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/XRD_Miller_Indices'>Miller Indices</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Principles of diffraction</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/XRD_Wave_structure'>Wave structure</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/XRD_Interaction_of_X_rays_with_matter'>Interaction of X-rays with matter</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/XRD_Diffraction_of_X_rays_by_a_crystal'>Diffraction of X-rays by a crystal</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/XRD_Penetration_depth'>Penetration depth</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/XRD_Diffraction_measurements'>Diffraction measurements</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>XRD in practice</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Anatomy of an X-ray diffractometer</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/XRD_Anatomy_of_an_X_ray_diffractometer___Intro'>Anatomy of an X-ray diffractometer - Intro</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/XRD_Source'>Source</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/XRD_Primary_optics'>Primary optics</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/XRD_Sample_holder___stage'>Sample holder & stage</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/XRD_Secondary_optics'>Secondary optics</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Sample preparation</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/XRD_Types_of_samples'>Types of samples</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/XRD_What_is_good_data'>What is good data?</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/XRD_The_importance_of_specimen_height'>The importance of specimen height</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/XRD_Safety'>Safety</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Analysis of data</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/XRD_What_the_data_tells_you'>What the data tells you</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/XRD_Phase_identification'>Phase identification</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Quantitative powder diffraction</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/XRD_Quantitative_analysis'>Quantitative analysis</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Factors affecting peak intensity</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/XRD_Factors_affecting_peak_intensity___Intro'>Factors affecting peak intensity - Intro</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/XRD_Structure_Factor'>Structure Factor</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/XRD_Multiplicity_factor'>Multiplicity factor</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/XRD_Lorentz_polarisation_factors'>Lorentz polarisation factors</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/XRD_Temperature_Factor'>Temperature Factor</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/XRD_Summation_of_factors_effecting_peak_intensity'>Summation of factors effecting peak intensity</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/XRD_Factors_effecting_peak_width'>Factors effecting peak width</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Rietveld Refinement</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/XRD_What_is_Rietveld_refinement'>What is Rietveld refinement?</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/XRD_Summary_of_analysis_cues'>Summary of analysis cues</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Specialist techniques using XRD</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Texture</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/XRD_What_is_texture'>What is texture?</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/XRD_Displaying_texture'>Displaying texture</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/XRD_Measuring_texture_with_X_rays'>Measuring texture with X-rays</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/XRD_Normalisations'>Normalisations</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/XRD_Residual_stress'>Residual stress</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/XRD_Glancing_Angle_XRD'>Glancing Angle XRD</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/XRD_Glancing_angle_XRD'>Glancing angle XRD</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/XRD_Credits'>Credits</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class='sitemap-section'>
+                                    <button class='sitemap-section-title'>Energy Dispersive Spectroscopy</button>
+                                    <div class='sitemap-section-list'>
+                                        <ul>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Introduction</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/EDS_Welcome'>Welcome</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/EDS_What_is_microanalysis'>What is microanalysis?</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Background information</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/EDS_What_is_energy_dispersive_spectroscopy'> What is energy dispersive spectroscopy?</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/EDS_Outputs_from_EDS_analysis'>Outputs from EDS analysis</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>X-ray generation</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/EDS_Generation_of_X_rays_in_the_electron_microscope'>Generation of X-rays in the electron microscope</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/EDS_Bremsstrahlung_X_ray_generation'>Bremsstrahlung X-ray generation</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/EDS_Kramer_s_law'>Kramer's law</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/EDS_Characteristic_X_rays'>Characteristic X-rays</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/EDS_Characteristic_X_ray_generation'>Characteristic X-ray generation</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/EDS_Nomenclature'>Nomenclature</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/EDS_The_X_ray_spectrum'>The X-ray spectrum</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/EDS_Moseley_s_law'>Moseley's law</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>X-ray intensity</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/EDS_Intensity_basics'>Intensity basics</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/EDS_Fluorescence_yield'>Fluorescence yield</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/EDS_X_ray_absorption'>X-ray absorption</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>X-ray detection</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/EDS_X_ray_detection_by_EDS'>X-ray detection by EDS</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/EDS_The_detector'>The detector</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/EDS_The_pulse_processor'>The pulse processor</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/EDS_The_multi_channel_analyser_or_display'>The multi-channel analyser or display</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/EDS_Care_and_calibration'>Care and calibration</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/EDS_EDS_spectral_resolution'>EDS spectral resolution</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/EDS_EDS_spectral_artefacts'>EDS spectral artefacts</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Qualitative EDS</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/EDS_Qualitative_EDS_X_ray_microanalysis_using_SEM_and_TEM'>Qualitative EDS X-ray microanalysis using SEM and TEM</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/EDS_X_ray_peak_identification'>X-ray peak identification</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Quantitative EDS</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/EDS_Quantitative_EDS___overview'>Quantitative EDS - overview</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/EDS_Limitations_of_quantitative_analysis'>Limitations of quantitative analysis</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/EDS_Standardized_quantitative_analysis'>Standardized quantitative analysis</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/EDS_Spectral_processing'>Spectral processing</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/EDS_Concentration_calculation'>Concentration calculation</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Accuracy of EDS</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/EDS_Accuracy__precision_and_detection_limits'>Accuracy, precision and detection limits</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/EDS_Random_and_systematic_errors'>Random and systematic errors</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>X-ray mapping</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/EDS_Mapping_information'>Mapping information</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/EDS_Parameters_for_X_ray_mapping'>Parameters for X-ray mapping</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/EDS_Artefacts_in_X_ray_mapping'>Artefacts in X-ray mapping</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/EDS_Credits'>Credits</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class='sitemap-section'>
+                                    <button class='sitemap-section-title'>Atom Probe Tomography</button>
+                                    <div class='sitemap-section-list'>
+                                        <ul>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>What is APT?</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Background Information</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/APT_Overview'>Overview</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/APT_Applications_of_APT'>Applications of APT</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/APT_What_can_APT_do_differently'>What can APT do differently?</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/APT_What_can_t_APT_do'>What can't APT do?</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/APT_A_brief_history_of_APT'>A brief history of APT</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>How does APT work?</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Intro to the technique</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/APT_The_principle_of_APT'>The principle of APT</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/APT_Two_flight_path_options'>Two flight path options</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/APT_Position_of_atoms_within_the_sample'>Position of atoms within the sample</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/APT_Atomic_position_in_the_sample'>Atomic position in the sample</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/APT_Chemical_identification'>Chemical identification</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/APT_3D_data_visualisation'>3D data visualisation</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/APT_Laser_assisted_APT'>Laser-assisted APT</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/APT_Spatial_resolution_of_APT'>Spatial resolution of APT</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/APT_Mass_resolution_of_APT'>Mass resolution of APT</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Essential parts of an Atom Probe</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/APT_The_vacuum_system'>The vacuum system</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/APT_Handling_and_transferring_samples'>Handling and transferring samples</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/APT_The_local_electrode'>The local electrode</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/APT_Ion_detection'>Ion detection</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/APT_The_voltage_control_system'>The voltage control system</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/APT_The_Laser_system'>The Laser system</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/APT_The_cryogenic_system'>The cryogenic system</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/APT_The_control_system'>The control system</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>How do I get good APT data?</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Specimen preparation</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/APT_Specimen_requirements'>Specimen requirements</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/APT_Two_main_techniques'>Two main techniques</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/APT_Electropolishing'>Electropolishing</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/APT_Focused_Ion_Beam__FIB'>Focused Ion Beam (FIB)</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Sample insertion in the atom probe</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/APT_Mounting_the_sample'>Mounting the sample</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/APT_Inserting_the_sample_in_the_atom_probe'>Inserting the sample in the atom probe</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/APT_Specimen_coarse_alignment'>Specimen coarse alignment</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/APT_Collecting_data'>Collecting data</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/APT_Data_quality'>Data quality</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/APT_Experimental_parameters'>Experimental parameters</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/APT_Voltage_mode_acquisition'>Voltage mode acquisition</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/APT_Laser_mode_acquisition'>Laser mode acquisition</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/APT_End_of_data_acquisition'>End of data acquisition</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Data processing and reconstruction</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/APT_Data_processing_steps'>Data processing steps</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/APT_Selection_of_ion_sequence_range'>Selection of ion sequence range</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/APT_Selection_of_region_of_interest__ROI'>Selection of region of interest (ROI)</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/APT_Time_of_flight_corrections'>Time of flight corrections</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/APT_Mass_calibration'>Mass calibration</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/APT_Ranged_ion_assignment'>Ranged-ion assignment</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/APT_Reconstruction'>Reconstruction</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/APT_Key_reconstruction_parameters'>Key reconstruction parameters </a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>How do I analyse APT data</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/APT_Mass_spectral_analysis'>Mass spectral analysis</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Concentration space analysis</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/APT_Grid_voxelisation'>Grid voxelisation</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/APT_Interfaces'>Interfaces</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/APT_Proxigram_analysis'>Proxigram analysis</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/APT_Solute_analysis___Clustering'>Solute analysis / Clustering</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/APT_Spatial_distribution_maps'>Spatial distribution maps</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Specialised APT techniques</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/APT_Field_Ion_Microscopy'>Field Ion Microscopy</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/APT_Correlative_SEM___APT'>Correlative SEM / APT</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/APT_Cryogenic_transfer_capabilities'>Cryogenic transfer capabilities</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/APT_Credits'>Credits</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class='sitemap-section'>
+                                    <button class='sitemap-section-title'>Focused Ion Beam</button>
+                                    <div class='sitemap-section-list'>
+                                        <ul>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>What is FIB?</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/FIB_FIB_overview'>FIB overview</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/FIB_Common_applications_of_FIB'>Common applications of FIB</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/FIB_Ion_sources'>Ion sources</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Ion–Solid Interactions</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/FIB_Introduction_to_ion_solid_interactions'>Introduction to ion solid interactions</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/FIB_How_many_ions'>How many ions?</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/FIB_Interaction_Overview'>Interaction Overview</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/FIB_Dislocation_Displacements'>Dislocation/Displacements</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/FIB_Ion_Implantation'>Ion Implantation</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/FIB_Secondary_Electrons'>Secondary Electrons</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/FIB_Secondary_Ions__Backscattered_Ions_and_Phonons'>Secondary Ions, Backscattered Ions and Phonons</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/FIB_Energy_loss'>Energy loss</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/FIB_Collision_Cascade'> Collision Cascade</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Sputtering</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/FIB_Sputtering_Overview'>Sputtering Overview</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/FIB_Sputtering_Yield'>Sputtering Yield</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>How does a FIB-SEM work?</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/FIB_Overview'>Overview</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Components of FIB</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/FIB_Introduction_to_components'>Introduction to components</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/FIB_Vacuum_system_and_Chamber'>Vacuum system and Chamber</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/FIB_SEM_and_FIB_columns'>SEM and FIB columns</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/FIB_Imaging_and_Analytical_Detectors'>Imaging and Analytical Detectors</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/FIB_Sample_Stage'>Sample Stage</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/FIB_Gas_Injectors'>Gas Injectors</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/FIB_Manipulators'>Manipulators</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/FIB_Geometry'>Geometry</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Concepts</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Stage Tilt</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/FIB_Beam_Geometry'>Beam Geometry</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/FIB_Imaging_Artefacts'>Imaging Artefacts</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/FIB_Eucentric_Height'>Eucentric Height</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/FIB_Coincidence_Point'>Coincidence Point</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Applications</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Ion Beam Imaging</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/FIB_Image_Formation'>Image Formation</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/FIB_Charging'>Charging</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/FIB_Channeling_Contrast'>Channeling Contrast</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/FIB_Destructive_Imaging'>Destructive Imaging</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Milling</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/FIB_Patterning_Mechanism'>Patterning Mechanism</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/FIB_Patterning_Parameters'>Patterning Parameters</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Patterning Parameters</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/FIB_Acceleration_Voltage'>Acceleration Voltage</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/FIB_Aperture_Beam_current'>Aperture/Beam current</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/FIB_Passes_Dwell_time'>Passes/Dwell time</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/FIB_Overlap_Pitch'>Overlap/Pitch</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/FIB_Scan_Direction'>Scan Direction</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/FIB_Beam_Alignments'>Beam Alignments</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Artefacts</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/FIB_Introduction_to_Artefacts'>Introduction to Artefacts</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/FIB_Curtaining'>Curtaining</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/FIB_Redeposition'>Redeposition</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/FIB_Implantation'>Implantation</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/FIB_Phase_Transformations'>Phase Transformations</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/FIB_Amorphization'>Amorphization</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/FIB_Interface_Mixing'>Interface Mixing</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/FIB_Heat_damage'>Heat damage</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/FIB_Channeling'>Channeling</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/FIB_Deposition'>Deposition</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Cross-sectioning</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/FIB_Introduction_to_cross_sectioning'>Introduction to cross-sectioning</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/FIB_Tips_and_Tricks'>Tips and Tricks</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>TEM-lamella preparation</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/FIB_Intro_to_TEM_lamella_preparation'>Intro to TEM-lamella preparation</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Process Steps</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/FIB_Deposition_of_protective_layer'>Deposition of protective layer</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/FIB_Prepare_Lamella_via_cross_sectioning'>Prepare Lamella via cross-sectioning</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/FIB_J_cut'>J-cut</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/FIB_Lift_out'>Lift-out</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/FIB_Thinning'>Thinning</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/FIB_Polishing'>Polishing</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/FIB_3D_Tomography'>3D Tomography</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/FIB_Credits'>Credits</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class='sitemap-section'>
+                                    <button class='sitemap-section-title'>Scanning Probe & Atomic Force Microscopy</button>
+                                    <div class='sitemap-section-list'>
+                                        <ul>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SPM_Introduction'>Introduction</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>AFM</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SPM_Background_information'>Background information</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SPM_Imaging__Interactions'>Imaging: Interactions</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SPM_What_can_you_measure'>What can you measure?</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Imaging modes</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SPM_Intro'>Intro</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SPM_Contact_mode'>Contact mode</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SPM_Tapping_mode'>Tapping mode</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SPM_Non_contact_mode'>Non-contact mode</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Specimen</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SPM_Specimen_choice'>Specimen choice</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SPM_Contact_and_tapping_modes'>Contact and tapping modes</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SPM_Non_contact_mode'>Non-contact mode</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SPM_Data_display'>Data display</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Artefacts</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SPM_Image_artefacts'>Image artefacts</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SPM_Tip_artefacts'>Tip artefacts</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SPM_Scanner_artefacts'>Scanner artefacts</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>AFM in practice</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Laser alignment</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SPM_Laser_alignment_on_cantilever'>Laser alignment on cantilever</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SPM_Cantilever_tuning'>Cantilever tuning</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Image quality optimisation</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SPM_Scan_rate'>Scan rate</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SPM_Gains'>Gains</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Set-point</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SPM_Contact_mode'>Contact mode</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SPM_Tapping_mode'>Tapping mode</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SPM_Feedback'>Feedback</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Control signal</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SPM_Control_modes'>Control modes</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SPM_Discontinuous'>Discontinuous</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Continuous</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SPM_Proportional_control__P'>Proportional control (P)</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SPM_Integral_control'>Integral control</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SPM_Derivative_control'>Derivative control</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SPM_Composite_control__PID'>Composite control (PID)</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Other Techniques</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SPM_Scanning_Tunneling_Microscopy__STM'>Scanning Tunneling Microscopy (STM)</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SPM_Near_field_scanning_optical_microscope__NSOM_SNOM'>Near-field scanning optical microscope (NSOM/SNOM)</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SPM_Tip_enhanced_Raman_spectroscopy__TERS'>Tip enhanced Raman spectroscopy (TERS)</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SPM_Credits'>Credits</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class='sitemap-section'>
+                                    <button class='sitemap-section-title'>Secondary Ion Mass Spectrometry</button>
+                                    <div class='sitemap-section-list'>
+                                        <ul>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Introduction to SIMS</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SIMS_What_is_SIMS'>What is SIMS?</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SIMS_Mass_analysers_in_SIMS'>Mass analysers in SIMS</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SIMS_Applications_of_SIMS'>Applications of SIMS</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Basic principles of SIMS</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SIMS_Ion_Sample_Interactions'>Ion–Sample Interactions</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SIMS_Static_vs_dynamic_SIMS'>Static vs dynamic SIMS</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>ToF-SIMS</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Primary-Ion Sources for ToF-SIMS</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SIMS_Liquid_Metal_Ion_Guns'>Liquid-Metal Ion Guns</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SIMS_Cluster_Sources'>Cluster Sources</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SIMS_Pulsing'>Pulsing</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SIMS_Bunching'>Bunching</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Collection optics</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SIMS_Time_of_Flight_analysers___overview'>Time of Flight analysers – overview</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Inside the analysers</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SIMS_Inside_the_ToF_analyser'>Inside the ToF analyser</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SIMS_Reflectron_TOF'>Reflectron-TOF</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SIMS_ESA_TOF'>ESA TOF </a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SIMS_Detectors'>Detectors</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SIMS_Data'>Data</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Sample preparation</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SIMS_Sample_requirements_for_ToF_SIMS'>Sample requirements for ToF-SIMS</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SIMS_Powders'>Powders</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SIMS_Suspensions_and_solutions'>Suspensions and solutions</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Applications of ToF-SIMS</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SIMS_Typical_applications'>Typical applications</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SIMS_Pharmaceutical_science'>Pharmaceutical science</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SIMS_Geology_and_mineralogy'>Geology and mineralogy</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SIMS_Forensics'>Forensics</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Large Geometry SIMS and NanoSIMS</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Common features</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SIMS_Common_features_of_the_Large_Geometry_and_NanoSIMS'>Common features of the Large Geometry and NanoSIMS</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SIMS_Primary_Ions_and_Primary_column'>Primary Ions and Primary column</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SIMS_Sample_chamber_and_stage'>Sample chamber and stage</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SIMS_Dynamic_mode'>Dynamic mode</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SIMS_Secondary_column'>Secondary column</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SIMS_Double_focussing_mass_spectrometer___overview'>Double focussing mass spectrometer - overview</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Inside the mass spectrometer</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SIMS_Electrostatic_analyser'>Electrostatic analyser</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SIMS_Magnetic_sector_analyser'>Magnetic sector analyser</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Collection system</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SIMS_Magnetic_sector_analyser_operation'>Magnetic sector analyser operation</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SIMS_Detectors'>Detectors</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SIMS_Sample_preparation_for_LG_and_Nano_SIMS'>Sample preparation for LG and Nano-SIMS</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>LG-SIMS - specific capabilities</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SIMS_Benefits_of_LG_SIMS'>Benefits of LG-SIMS</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SIMS_Data_Output_from_LG_SIMS'>Data Output from LG-SIMS</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SIMS_Instrument_performance'>Instrument performance</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SIMS_Calibration'>Calibration</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SIMS_Matrix_effect'>Matrix effect</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SIMS_LG_SIMS_for_isotope_geochemistry'>LG-SIMS for isotope geochemistry</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SIMS_Applications_of_LG_SIMS_in_geoscience'>Applications of LG-SIMS in geoscience</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SIMS_LG_SIMS_for_Nuclear_Safeguards_and_Forensics'>LG-SIMS for Nuclear Safeguards and Forensics</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>NanoSIMS - high resolution imaging mass-spectrometry</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SIMS_Benefits_of_Nano_SIMS'>Benefits of Nano-SIMS</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SIMS_NanoSIMS_applications'>NanoSIMS applications</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SIMS_NanoSIMS___Cancer_therapeutics'>NanoSIMS – Cancer therapeutics</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SIMS_NanoSIMS___Environmental_processes'>NanoSIMS – Environmental processes</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SIMS_NanoSIMS___Medical'>NanoSIMS – Medical </a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SIMS_NanoSIMS___Geology'>NanoSIMS – Geology </a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SIMS_NanoSIMS___Materials_Science'>NanoSIMS – Materials Science</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/SIMS_Credits'>Credits</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class='sitemap-section'>
+                                    <button class='sitemap-section-title'>Research Data Management</button>
+                                    <div class='sitemap-section-list'>
+                                        <ul>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/RDM_What_is_research_data'>What is research data?</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/RDM_Introduction_to_research_data_management'>Introduction to research data management</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/RDM_Maintaining_quality_and_integrity'>Maintaining quality and integrity</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/RDM_Benefits_of_managing_research_data'>Benefits of managing research data</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>FAIR data principles</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/RDM_What_is_FAIR_data'>What is FAIR data?</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/RDM_The_FAIR_principles_explained'>The FAIR principles explained</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/RDM_Persistent_identifiers'>Persistent identifiers</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/RDM_Are_FAIR_data_and_open_data_the_same'>Are FAIR data and open data the same?</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>The CARE principles </a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/RDM_What_are_CARE_principles'>What are CARE principles?</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/RDM_What_are_Indigenous_data'>What are Indigenous data?</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/RDM_The_CARE_principles_explained'>The CARE principles explained</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link no-children'>Be FAIR and CARE</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/RDM_FAIR_and_CARE_are_complementary'>FAIR and CARE are complementary</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/RDM_Global_guidelines'>Global guidelines</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/RDM_Research_data_management_plans'>Research data management plans</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/RDM_Credits'>Credits</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class='sitemap-section'>
+                                    <button class='sitemap-section-title'>Work Health and Safety</button>
+                                    <div class='sitemap-section-list'>
+                                        <ul>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/WHS_Introduction'>Introduction</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/WHS_Typical_hazards_at_a_microscopy_facility'>Typical hazards at a microscopy facility</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/WHS_Your_specimen'>Your specimen</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/WHS_Microscopy_specimen_preparation'>Microscopy specimen preparation</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/WHS_Microscope_operation'>Microscope operation</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/WHS_Local_rules'>Local rules</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/WHS_Supporting_documentation'>Supporting documentation</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/WHS_Summary'>Summary</a></li>
+                                            <li class='sitemap-item'><a class='sitemap-link' href='https://myscope.training/WHS_Credits'>Credits</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="sitemap-others sitemap-div-wrapper">
+                                <label>Modules in PDF</label>
+                                <div class="sitemap-section">
+                                    <div class="">
+                                        <ul>
+                                            <li class="sitemap-section-title"><a class="sitemap-link"
+                                                    href="/pdf/MyScope_M101.pdf" target="_blank">Microscopy Concepts</a></li>
+                                            <li class="sitemap-section-title"><a class="sitemap-link"
+                                                    href="/pdf/MyScope_SEM.pdf" target="_blank">Scanning Electron Microscopy</a></li>
+                                            <li class="sitemap-section-title"><a class="sitemap-link"
+                                                    href="/pdf/MyScope_TEM.pdf" target="_blank">Transmission Electron Microscopy</a></li>
+                                            <li class="sitemap-section-title"><a class="sitemap-link"
+                                                    href="/pdf/MyScope_LM.pdf" target="_blank">Light &amp; Fluorescence Microscopy</a></li>
+                                            <li class="sitemap-section-title"><a class="sitemap-link"
+                                                    href="/pdf/MyScope_CRYO.pdf" target="_blank">Cryo-Electron Microscopy</a></li>
+                                            <li class="sitemap-section-title"><a class="sitemap-link"
+                                                    href="/pdf/MyScope_XRD.pdf" target="_blank">X-ray Diffraction</a></li>
+                                            <li class="sitemap-section-title"><a class="sitemap-link"
+                                                    href="/pdf/MyScope_EDS.pdf" target="_blank">Energy Dispersive Spectroscopy</a></li>
+                                            <li class="sitemap-section-title"><a class="sitemap-link"
+                                                    href="/pdf/MyScope_APT.pdf" target="_blank">Atom Probe Tomography</a></li>
+                                            <li class="sitemap-section-title"><a class="sitemap-link"
+                                                    href="/pdf/MyScope_FIB.pdf" target="_blank">Focused Ion Beam</a></li>
+                                            <li class="sitemap-section-title"><a class="sitemap-link"
+                                                    href="/pdf/MyScope_SPM.pdf" target="_blank">Scanning Probe &amp; Atomic Force
+                                                    Microscopy</a></li>
+                                            <li class="sitemap-section-title"><a class="sitemap-link"
+                                                    href="/pdf/MyScope_WHS.pdf" target="_blank">Work Health and Safety</a></li>
+                                            <li class="sitemap-section-title"><a class="sitemap-link" href="/pdf/MyScope_RDM.pdf" target="_blank">Research Data Management</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="sitemap-others sitemap-div-wrapper">
+                                <label>Simulators</label>
+                                <div class="sitemap-section">
+                                    <div class="">
+                                        <ul>
+                                             <li class="sitemap-section-title"><a class="sitemap-link" href="/SEM_simulator.html">SEM Simulator</a></li> 
+                                            <li class="sitemap-section-title"><a class="sitemap-link" href="/TEM_simulator.html">TEM Simulator</a></li>
+                                            <li class="sitemap-section-title"><a class="sitemap-link" href="/LM_simulator.html">LFM Simulator</a></li>
+                                            <li class="sitemap-section-title"><a class="sitemap-link" href="/XRD_simulator.html">XRD Simulator</a></li>
+                                            <li class="sitemap-section-title"><a class="sitemap-link" href="/EDS_simulator.html">EDS Simulator</a></li>
+                                            <li class="sitemap-section-title"><a class="sitemap-link" href="/APT_simulator.html">APT Simulator</a></li>
+                                            <li class="sitemap-section-title"><a class="sitemap-link" href="/FIB_simulator.html">FIB Simulator</a></li>
+                                            <li class="sitemap-section-title"><a class="sitemap-link" href="/SPM_simulator.html">SPM Simulator</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="sitemap-right-column">
+                            <div class="sitemap-others sitemap-div-wrapper">
+                                <label>Microscopy Australia Facilities</label>
+                                <div class="sitemap-section">
+                                    <div class="">
+                                        <ul>
+                                            <li class="sitemap-section-title"><a class="sitemap-link" target="_blank"
+                                                    href="https://sydney.edu.au/acmm/">The University of Sydney</a></li>
+                                            <li class="sitemap-section-title"><a class="sitemap-link" target="_blank"
+                                                    href="https://cmm.centre.uq.edu.au">The University of Queensland</a>
+                                            </li>
+                                            <li class="sitemap-section-title"><a class="sitemap-link" target="_blank"
+                                                    href="http://www.analytical.unsw.edu.au/facilities/emu">The
+                                                    University of New South Wales</a></li>
+                                            <li class="sitemap-section-title"><a class="sitemap-link" target="_blank"
+                                                    href="http://microscopy.anu.edu.au">Australian National University</a></li>
+                                            <li class="sitemap-section-title"><a class="sitemap-link" target="_blank"
+                                                    href="http://www.cmca.uwa.edu.au">The University of Western
+                                                    Australia</a></li>
+                                            <li class="sitemap-section-title"><a class="sitemap-link" target="_blank"
+                                                    href="https://www.flinders.edu.au/microscopy/">Flinders
+                                                    University</a></li>
+                                            <li class="sitemap-section-title"><a class="sitemap-link" target="_blank"
+                                                    href="https://www.adelaide.edu.au/microscopy/">The University of
+                                                    Adelaide</a></li>
+                                            <li class="sitemap-section-title"><a class="sitemap-link" target="_blank"
+                                                    href="https://fii.unisa.edu.au">University of South Australia</a>
+                                            </li>
+                                            <li class="sitemap-section-title"><a class="sitemap-link" target="_blank"
+                                                    href="https://www.monash.edu/researchinfrastructure/mcem">Monash
+                                                    University</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="sitemap-others sitemap-div-wrapper">
+                                <label>Microscopy Australia Partners</label>
+                                <div class="sitemap-section">
+                                    <div class="">
+                                        <ul>
+                                            <li class="sitemap-section-title"><a class="sitemap-link" target="_blank"
+                                                    href="https://www.fei.com/home/">FEI</a></li>
+                                            <li class="sitemap-section-title"><a class="sitemap-link" target="_blank"
+                                                    href="https://www.cameca.com">CAMECA</a></li>
+                                            <li class="sitemap-section-title"><a class="sitemap-link" target="_blank"
+                                                    href="https://www.globalbioimaging.org">Global Bioimaging</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="sitemap-others sitemap-div-wrapper">
+                                <label>Educational Supporters</label>
+                                <div class="sitemap-section">
+                                    <div class="">
+                                        <ul>
+                                            <li class="sitemap-section-title"><a class="sitemap-link" target="_blank"
+                                                    href="https://www.ntu.edu.sg/Pages/home.aspx">Nanyang Technological
+                                                    University</a></li>
+                                            <li class="sitemap-section-title"><a class="sitemap-link" target="_blank"
+                                                    href="https://www.leica-microsystems.com/science-lab/">Leica</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="sitemap-others sitemap-div-wrapper">
+                                <label>Social Channels</label>
+                                <div class="sitemap-section">
+                                    <div class="">
+                                        <ul>
+                                            <li class="sitemap-section-title"><a class="sitemap-link" target="_blank"
+                                                    href="https://www.youtube.com/microscopyaustralia">Youtube</a></li>
+                                            <li class="sitemap-section-title"><a class="sitemap-link" target="_blank"
+                                                    href="https://www.instagram.com/microscopy_australia/">Instagram</a>
+                                            </li>
+                                            <li class="sitemap-section-title"><a class="sitemap-link" target="_blank"
+                                                    href="https://twitter.com/micro_au">Twitter</a></li>
+                                            <li class="sitemap-section-title"><a class="sitemap-link" target="_blank"
+                                                    href="https://au.linkedin.com/company/microscopy-australia">Linkedin</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="sitemap-others sitemap-div-single">
+                                <label><a class="sitemap-link" target="_blank" href="https://micro.org.au">Microscopy
+                                        Australia</a></label>
+                            </div>
+                            <div class="sitemap-others sitemap-div-single">
+                                <label><a class="sitemap-link" target="_blank"
+                                        href="http://myscope-explore.org.au">MyScope Explore</a></label>
+                            </div>
+                            <div class="sitemap-others sitemap-div-single">
+                                <label><a class="sitemap-link" target="_blank"
+                                        href="https://micro.org.au/online-tools/technique-finder">Technique
+                                        Finder</a></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="invisible-margin"></div>
+            </div>
+        </div>
+        <!--    -->
+
+    <script src="js/simulator_snippets.js"></script>
+    <script src="js/SEM_instruction_steps.js"></script>
+    <script src="js/SEM_steps.js"></script>
+    <script src="js/resize.js"></script>
+    <script src="js/StackBlur.js"></script>
+    <script src="js/jquery-ui-slider-pips.min.js"></script>
+    <script src="js/SEM_simulator.js"></script>
+</body></html>
